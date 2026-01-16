@@ -5,10 +5,10 @@ FROM registry.access.redhat.com/ubi10/nginx-126:10.0
 COPY index.html /usr/share/nginx/html/index.html
 
 # Kopiera nginx.conf till rätt plats
-COPY nginx.conf /etc/nginx/nginx.conf
+#COPY nginx.conf /etc/nginx/nginx.conf
 
-# Exponera port 8080
-EXPOSE 8080
+# Exponera port 80-> container port
+EXPOSE 80
 
 # Starta nginx i förgrund
 CMD ["nginx", "-g", "daemon off;"]
