@@ -1,0 +1,28 @@
+#Base image go-toolset: Go image
+FROM registry.access.redhat.com/ubi10/go-toolset:10.0
+
+# Set working directory to backend map
+WORKDIR /backend
+
+# Apply dependencies for Go - to build backend 
+COPY go.mod go.sum ./
+
+
+# Get dependencies for building backend with Go. Runs the command:
+RUN go mod tidy
+
+#Copy files from backend map
+COPY . .
+
+#Run the binary file for building backend with Go . Runs the command:
+RUN go build -o guestbook-api .
+
+#Expose port for application: 8080
+EXPOSE 8080
+
+
+
+#Start backend 
+CMD ["./guestbook-api"]
+
+
