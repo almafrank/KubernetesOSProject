@@ -1,14 +1,17 @@
-# Använd Red Hat UBI nginx image
-FROM registry.access.redhat.com/ubi10/nginx-126:10.0
+# Använd Red Hat UBI nginx image- Bas image används med installerad Openshift(Kubernetes)- FUNGERAR INTE LOKALT
+#FROM registry.access.redhat.com/ubi10/nginx-126:10.0
 
-# Kopiera index.html till nginx html-mapp
+# Testa lokalt med Podman + Windows, Ingen Openshift: Bas image nginx:alpine
+FROM nginx:alpine
+
+# Kopiera index.html och lägger i följande path- Används lokalt och med Openshift!
 COPY index.html /usr/share/nginx/html/index.html
 
-# Kopiera nginx.conf till rätt plats
+# Kopiera nginx.conf fil och lägger i följande path- används med installerad Openshift(Kubernetes)- FUNGERAR INTE LOKALT
 #COPY nginx.conf /etc/nginx/nginx.conf
 
-# Exponera port 80-> container port
+# Exponera port 80-> container port 80 ->web 8081
 EXPOSE 80
 
-# Starta nginx i förgrund
+# Starta nginx webserver
 CMD ["nginx", "-g", "daemon off;"]
