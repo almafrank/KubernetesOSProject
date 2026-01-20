@@ -7,9 +7,8 @@ WORKDIR /backend
 # Apply dependencies for Go - to build backend 
 COPY go.mod go.sum ./
 
-
-# Get dependencies for building backend with Go. Runs the command:
-RUN go mod tidy
+#Download dependencies
+RUN go mod download
 
 #Copy files from backend map
 COPY . .
@@ -19,7 +18,6 @@ RUN go build -o guestbook-api .
 
 #Expose port for application: 8080
 EXPOSE 8080
-
 
 
 #Start backend 
