@@ -13,7 +13,7 @@ COPY index.html /opt/app-root/src/index.html
 #COPY local-nginx.conf /etc/nginx/nginx.conf->med Openshift
 COPY local-nginx.conf /etc/nginx/conf.d/default.conf
 
-# Internt port 8080->web port 8081
+# Internt port 8080->web port 8081       OBS: web port ska vara 8080 när det är openshift senare
 EXPOSE 8080
 
 # Starta nginx webserver
