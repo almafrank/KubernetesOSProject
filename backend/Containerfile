@@ -1,6 +1,9 @@
 #Base image go-toolset: Go image
 FROM registry.access.redhat.com/ubi10/go-toolset:10.0
 
+
+USER root
+
 # Set working directory to backend map
 WORKDIR /backend
 
