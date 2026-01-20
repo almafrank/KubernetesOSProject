@@ -21,7 +21,7 @@ jobs:
   build-frontend:
     runs-on: ubuntu-latest
 
-    permission:
+    permissions:
       contents: read
       packages: write
 
@@ -35,27 +35,20 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.almafrank }}
+          username: ${{ github.actor }}
           password: ${{ secrets.TOKEN2026 }}
     
     #Bygger frontend image med container
-      - name: Build frontend image
+      - name: Build and push frontend image
         run: |
-          docker build \
-          -f frontend/Containerfile\
-          -t ghcr.io/almafrank/localhost/frontend-guestbook:latest\
-          frontend-guestbook
-          
+          docker build -f frontend/Containerfile -t ghcr.io/almafrank/frontend-guestbook:latest frontend
+          docker push ghcr.io/almafrank/frontend-guestbook:latest
       
 
-      - name: Push frontend image
-        run: |
-          docker push ghcr.io/almafrank/localhost/frontend-guestbook:latest\
-          frontend-guestbook
+      
 
   build-backend:
     needs: build-frontend
-    build-backend:
     runs-on: ubuntu-latest
     steps:
 
@@ -72,18 +65,12 @@ jobs:
           password: ${{ secrets.TOKEN2026 }}
     
     #Bygger backend image med container
-      - name: Build backend image
+      - name: Build and push backend image
         run: |
-          docker build \
-          -f backend/Containerfile\
-          -t ghcr.io/almafrank/localhost/backend-guestbook:latest\
-          backend-guestbook
+          docker build -f backend/Containerfile -t ghcr.io/almafrank/backend-guestbook:latest backend
+          docker push ghcr.io/almafrank/backend-guestbook:latest
 
-      - name: Push backend image
-        run: |
-          docker push ghcr.io/almafrank/localhost/backend-guestbook:latest\
-          backend-guestbook
-          
+      
           
           
       
