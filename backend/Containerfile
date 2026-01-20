@@ -1,9 +1,6 @@
 #Base image go-toolset: Go image
 FROM registry.access.redhat.com/ubi10/go-toolset:10.0
 
-
-USER root
-
 # Set working directory to backend map
 WORKDIR /backend
 
@@ -12,7 +9,10 @@ COPY go.mod go.sum ./
 
 
 # Get dependencies for building backend with Go. Runs the command:
+#RUN go mod tidy
 RUN go mod download
+
+
 
 #Copy files from backend map
 COPY . .
