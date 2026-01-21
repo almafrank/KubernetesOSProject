@@ -3,6 +3,10 @@ name: Build and Push Containers to GHCR
 on:
   workflow_call:
 
+permissions:
+  contents: read
+  packages: write   
+
 #bygga postgres image
 jobs:
   
