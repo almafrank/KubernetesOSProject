@@ -26,10 +26,12 @@ jobs:
 
         # Go command Install Go dependencies
         - name: Install Go Dependencies
+          working-directory: backend
           run: go mod tidy
 
         # Run unittest in backend/main-test.go:
         - name: Run unittests
+          working-directory: backend
           run: | 
             cd backend
-            go test -v .\main-test.go
+            go test -v main-test.go
