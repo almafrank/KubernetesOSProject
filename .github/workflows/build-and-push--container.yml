@@ -1,7 +1,7 @@
 name: Build and Push Containers to Ghcr(Github Container Registry)
 #trigger feature branch
 on:
-   workflow_call:
+  workflow_call:
 
 #bygga postgres image
 jobs:
