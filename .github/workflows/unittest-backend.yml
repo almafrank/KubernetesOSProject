@@ -27,9 +27,9 @@ jobs:
         # Go command Download Go 
         - name: Download Go Dependencies
           working-directory: backend
-          run: go mod download
+          run: make deps
 
         # Run unittest in backend/main-test.go:
         - name: Run unittests
           working-directory: backend
-          run: go test -v ./...
+          run: make test
