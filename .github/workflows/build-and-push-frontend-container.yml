@@ -3,7 +3,7 @@ name: Build and Push Frontend Container to Ghcr(Github Container Registry)
 #trigger when workflow build-and-push-backend-container is completed
 on:
   workflow_run:
-    workflows: ["Build and Push Backend Container to Ghcr(Github Container Registry)"]  # Namnet på workflow som måste vara klar först
+    workflows: ["build-backend-container-image"]  # Namnet på workflow som måste vara klar först
     types:
       - completed
 
