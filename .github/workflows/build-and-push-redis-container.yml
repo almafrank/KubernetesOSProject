@@ -15,7 +15,7 @@ on:
 #bygga redis image
 jobs:
   
-  build-frontend:
+  build-redis-container-image:
     runs-on: ubuntu-latest
 
     permissions:
