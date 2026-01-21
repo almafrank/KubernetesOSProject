@@ -1,0 +1,7 @@
+FROM quay.io/kurs/redis:latest
+
+# Redis data directory (persistent storage)
+VOLUME /data
+
+# Expose Redis port
+EXPOSE 6379
