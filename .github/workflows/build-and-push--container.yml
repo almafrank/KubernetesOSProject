@@ -1,10 +1,7 @@
 name: Build and Push Containers to Ghcr(Github Container Registry)
 #trigger feature branch
 on:
-   workflow_run:
-    workflows: ["Backend Unit Tests"]  
-    types:
-      - completed
+   workflow_call:
 
 #bygga postgres image
 jobs:
