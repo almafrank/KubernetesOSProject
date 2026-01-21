@@ -8,7 +8,7 @@ name: Build and Push Redis Containers to Ghcr
 #trigger when workflow build-and-push-backend-container is completed
 on:
   workflow_run:
-    workflows: ["build-and-push-postgres-container"]  # Namnet på workflow som måste vara klar först
+    workflows: ["build-and-push-postgres-container.yml"]  # Namnet på workflow som måste vara klar först
     types:
       - completed
 
