@@ -3,7 +3,7 @@
 
 
 
-name: Build and Push Container
+name: Build and Push Containers to Ghcr
 
 #trigger feature branch
 on:
@@ -69,6 +69,29 @@ jobs:
         run: |
           docker build -f backend/Containerfile -t ghcr.io/almafrank/backend-guestbook:latest backend
           docker push ghcr.io/almafrank/backend-guestbook:latest
+    
+  build-postgres:
+    needs: build-backend
+    runs-on: ubuntu-latest
+    steps:
+
+    #Kollar repot
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+    # Logga in på Github för att pusha och pulla images i Container Registry
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.TOKEN2026 }}
+    
+    #Bygger backend image med container
+      - name: Build and push postgres image to Container Registry
+        run: |
+          docker build -f postgres/Containerfile -t ghcr.io/almafrank/postgres-guestbook:latest postgres
+          docker push ghcr.io/almafrank/postgres-guestbook:latest
 
       
           
