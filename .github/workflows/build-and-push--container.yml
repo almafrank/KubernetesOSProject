@@ -1,4 +1,4 @@
-name: Build and Push Containers to Ghcr(Github Container Registry)
+name: Build and Push Containers to GHCR
 #trigger feature branch
 on:
   workflow_call:
@@ -9,10 +9,7 @@ jobs:
   build-postgres-container-image:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
-
+    
     steps:
    #Kollar repot
       - name: Checkout repo
@@ -24,7 +21,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026 }}
+          password: ${{ secrets.GITHUB_TOKEN }}
     
     #Bygger postgres-db image med container
       - name: Build and push postgres image to Container Registry
@@ -36,10 +33,7 @@ jobs:
     needs: build-postgres-container-image
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
-
+    
     steps:
     #Kollar repot
       - name: Checkout repo
@@ -51,7 +45,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026 }}
+          password: ${{ secrets.GITHUB_TOKEN }}
     
     #Bygger redis image med container
       - name: Build and push redis image to Container Registry
@@ -65,10 +59,7 @@ jobs:
     
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
-
+    
     steps:
    #Kollar repot
       - name: Checkout repo
@@ -80,7 +71,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026 }}
+          password: ${{ secrets.GITHUB_TOKEN }}
     
     #Bygger backend image med container
       - name: Build and push backend image to Container Registry
@@ -93,9 +84,7 @@ jobs:
     
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: write
+    
 
     steps:
    #Kollar repot
@@ -108,7 +97,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026 }}
+          password: ${{ secrets.GITHUB_TOKEN }}
     
     #Bygger frontend image med container
       - name: Build and push frontend image to Container Registry
