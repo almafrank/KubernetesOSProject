@@ -1,0 +1,12 @@
+FROM quay.io/fedora/postgresql-16:latest
+
+# Default environment variables 
+ENV POSTGRESQL_USER=guestbook \
+    POSTGRESQL_PASSWORD=password \
+    POSTGRESQL_DATABASE=guestbook
+
+# PostgreSQL data directory (för persistent storage)
+VOLUME /var/lib/pgsql/data
+
+# Expose PostgreSQL port
+EXPOSE 5432
