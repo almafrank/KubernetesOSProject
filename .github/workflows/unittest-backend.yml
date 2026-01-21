@@ -24,10 +24,10 @@ jobs:
           with:
             go-version: 1.24.12
 
-        # Go command Install Go dependencies
-        - name: Install Go Dependencies
+        # Go command Download Go 
+        - name: Download Go Dependencies
           working-directory: backend
-          run: go mod tidy
+          run: go mod download
 
         # Run unittest in backend/main-test.go:
         - name: Run unittests
