@@ -32,6 +32,4 @@ jobs:
         # Run unittest in backend/main-test.go:
         - name: Run unittests
           working-directory: backend
-          run: | 
-            cd backend
-            go test -v main-test.go
+          run: go test -v main-test.go
