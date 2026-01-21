@@ -1,0 +1,35 @@
+name: Build Unittest for Backend with Go
+#trigger feature branch
+on:
+  push:
+    branches: 
+      - feature/* 
+      
+  pull_request:
+    branches:
+      - main  
+
+jobs: 
+    build-unittest-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+        # Checkout repo
+        - name: Checkout repo
+          uses: actions/checkout@v4
+
+        # Set up Go
+        - name: Set up Go
+          uses: actions/setup-go@v4
+          with:
+            go-version: go1.24.12 windows/amd64
+
+        # Go command Install Go dependencies
+        - name: Install Go Dependencies
+          run: go mod tidy
+
+        # Run unittest in backend/main-test.go:
+        - name: Run unittests
+          run: | 
+            cd backend
+            go test -v .\main-test.go
