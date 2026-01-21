@@ -1,4 +1,4 @@
-name: Build Unittest for Backend with Go
+name: Backend Unit Tests
 #trigger feature branch
 on:
   push:
