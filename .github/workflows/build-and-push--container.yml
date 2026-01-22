@@ -25,7 +25,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026}}
+          password: ${{ secrets.GITHUB_TOKEN}}
     
     #Bygger postgres-db image med container
       - name: Build and push postgres image to Container Registry
