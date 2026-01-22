@@ -62,8 +62,8 @@ jobs:
     #Bygger postgres-db image med container
       - name: Build and push postgres image to Container Registry
         run: |
-          docker build -f postgres/Containerfile -t ghcr.io/kubernetesosproject/postgres-guestbook:latest postgres
-          docker push ghcr.io/kubernetesosproject/postgres-guestbook:latest
+          docker build -f postgres/Containerfile -t ghcr.io/almafrank/postgres-guestbook:latest postgres
+          docker push ghcr.io/almafrank/postgres-guestbook:latest
 
   build-redis-container-image:
     needs: build-postgres-container-image
