@@ -18,4 +18,8 @@ jobs:
 
   build-containers:
     needs: unit-tests
+    permissions:
+      contents: read
+      packages: write
+      
     uses: ./.github/workflows/build-and-push--container.yml
