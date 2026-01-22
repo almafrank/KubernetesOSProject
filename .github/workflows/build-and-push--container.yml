@@ -2,16 +2,16 @@ name: Build and Push Containers to GHCR
 #trigger feature branch
 on:
   workflow_call:
-permissions:
-      contents: read
-      packages: write
-
 
 #bygga postgres image
 jobs:
   
   build-postgres-container-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
 
     
     steps:
