@@ -68,6 +68,10 @@ jobs:
   build-redis-container-image:
     needs: build-postgres-container-image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
 
     
     steps:
@@ -94,6 +98,10 @@ jobs:
     needs: build-redis-container-image
     
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
 
     
     steps:
@@ -119,6 +127,10 @@ jobs:
     needs: build-backend-container-image
     
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
 
     
 
