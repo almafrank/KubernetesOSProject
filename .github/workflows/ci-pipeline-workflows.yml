@@ -1,24 +1,51 @@
-name: Build and Push Containers to Ghcr(Github Container Registry)
+name: Build unittest and Build and Push Containers to GHCR
 #trigger feature branch
 on:
   push:
-    branches: 
-      - feature/* 
-      
+    branches:
+      - feature/*
+
   pull_request:
     branches:
-      - main  
+      - main
 
 #bygga postgres image
 jobs:
+
+  build-unittest-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+        # Checkout repo
+        - name: Checkout repo
+          uses: actions/checkout@v4
+
+        # Set up Go
+        - name: Set up Go
+          uses: actions/setup-go@v4
+          with:
+            go-version: 1.24.12
+
+        # Go command Download Go 
+        - name: Download Go Dependencies
+          working-directory: backend
+          run: go mod download
+
+        # Run unittest in backend/main-test.go:
+        - name: Run unittests
+          working-directory: backend
+          run: go test -v ./...
+
   
   build-postgres-container-image:
     runs-on: ubuntu-latest
-
+    needs: build-unittest-backend
     permissions:
       contents: read
       packages: write
 
+
+    
     steps:
    #Kollar repot
       - name: Checkout repo
@@ -30,7 +57,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026 }}
+          password: ${{ secrets.TOKEN2026}}
     
     #Bygger postgres-db image med container
       - name: Build and push postgres image to Container Registry
@@ -41,11 +68,12 @@ jobs:
   build-redis-container-image:
     needs: build-postgres-container-image
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
 
+
+    
     steps:
     #Kollar repot
       - name: Checkout repo
@@ -70,11 +98,12 @@ jobs:
     needs: build-redis-container-image
     
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
 
+
+    
     steps:
    #Kollar repot
       - name: Checkout repo
@@ -86,7 +115,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026 }}
+          password: ${{ secrets.TOKEN2026}}
     
     #Bygger backend image med container
       - name: Build and push backend image to Container Registry
@@ -98,10 +127,12 @@ jobs:
     needs: build-backend-container-image
     
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
+
+
+    
 
     steps:
    #Kollar repot
