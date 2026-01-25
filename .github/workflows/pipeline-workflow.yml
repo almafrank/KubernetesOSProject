@@ -16,4 +16,8 @@ jobs:
 
    build-container-images:
     needs: build-unittest
+    permissions:
+      contents: read
+      packages: write
+
     uses: ./.github/workflows/ci-pipeline-workflows.yml
