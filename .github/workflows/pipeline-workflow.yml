@@ -8,7 +8,7 @@ on:
   pull_request:
     branches:
       - main
-
+#--------------------------------------------------------------------------
 #bygga postgres image
 jobs:
    build-unittest:
@@ -24,7 +24,7 @@ jobs:
     secrets:
       TOKEN2026: ${{ secrets.TOKEN2026 }}
 
-    
+#---------------------------------------------------------------------------------    
    build-container-images-redis:
     needs: build-container-images-postgres
     permissions:
@@ -36,7 +36,7 @@ jobs:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
 
 
-  
+#--------------------------------------------------------------------------------- 
    build-container-images-backend:
     needs: build-container-images-redis
     permissions:
@@ -46,7 +46,7 @@ jobs:
     uses: ./.github/workflows/build-container-image-backend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
-  
+#----------------------------------------------------------------------------------  
    build-container-images-frontend:
     needs: build-container-images-backend
     permissions:

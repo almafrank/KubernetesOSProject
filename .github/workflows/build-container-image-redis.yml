@@ -1,11 +1,11 @@
 name: Build container image Redis and Push Containers to GHCR
-#trigger feature branch
+#trigger feature branch och pr
 on:
   workflow_call:
      secrets:
       TOKEN2026:
         required: true
-#bygga postgres image
+
 jobs:
   build-redis-container-image:
   
