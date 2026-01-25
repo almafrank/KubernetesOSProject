@@ -20,7 +20,7 @@ jobs:
       contents: read
       packages: write
 
-    uses: ./.github/workflows/ci-pipeline-workflows.yml
+    uses: ./.github/workflows/build-container-image-postgres.yml
     secrets:
       TOKEN2026: ${{ secrets.TOKEN2026 }}
 

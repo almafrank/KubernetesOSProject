@@ -1,4 +1,4 @@
-name: Build container image and Push Containers to GHCR
+name: Build container image Postgres and Push Containers to GHCR
 #trigger feature branch
 on:
   workflow_call:
