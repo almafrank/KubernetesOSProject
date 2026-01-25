@@ -1,14 +1,7 @@
-name: Build unittest and Build and Push Containers to GHCR
+name:  Build and Push Containers to GHCR
 #trigger feature branch
 on:
-  push:
-    branches:
-      - feature/*
-
-  pull_request:
-    branches:
-      - main
-
+  workflow_call:
 #bygga postgres image
 jobs:
 

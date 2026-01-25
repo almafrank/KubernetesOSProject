@@ -1,0 +1,19 @@
+name: Pipeline Workflow
+#trigger feature branch
+on:
+  push:
+    branches:
+      - feature/*
+
+  pull_request:
+    branches:
+      - main
+
+#bygga postgres image
+jobs:
+   build-unittest:
+    uses: ./.github/workflows/build-backend-unittest.yml
+
+   build-container-images:
+    needs: build-unittest
+    uses: ./.github/workflows/ci-pipeline-workflows.yml
