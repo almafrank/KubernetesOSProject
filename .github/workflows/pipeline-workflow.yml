@@ -11,11 +11,11 @@ on:
 #--------------------------------------------------------------------------
 #bygga postgres image
 jobs:
-   build-unittest:
+   unittest:
     uses: ./.github/workflows/build-backend-unittest.yml
 
-   build-container-images-postgres:
-    needs: build-unittest
+   container-postgres:
+    needs: unittest
     permissions:
       contents: read
       packages: write
@@ -25,8 +25,8 @@ jobs:
       TOKEN2026: ${{ secrets.TOKEN2026 }}
 
 #---------------------------------------------------------------------------------    
-   build-container-images-redis:
-    needs: build-container-images-postgres
+   container-redis:
+    needs: container-postgres
     permissions:
           contents: read
           packages: write
@@ -37,8 +37,8 @@ jobs:
 
 
 #--------------------------------------------------------------------------------- 
-   build-container-images-backend:
-    needs: build-container-images-redis
+   container-backend:
+    needs: container-redis
     permissions:
           contents: read
           packages: write
@@ -47,8 +47,8 @@ jobs:
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
 #----------------------------------------------------------------------------------  
-   build-container-images-frontend:
-    needs: build-container-images-backend
+   container-frontend:
+    needs: container-backend
     permissions:
           contents: read
           packages: write
