@@ -1,4 +1,4 @@
-name: Build container image and Push Containers to GHCR
+name: Build container image Redis and Push Containers to GHCR
 #trigger feature branch
 on:
   workflow_call:
@@ -7,10 +7,9 @@ on:
         required: true
 #bygga postgres image
 jobs:
-
-  build-postgres-container-image:
+  build-redis-container-image:
+  
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
@@ -18,7 +17,7 @@ jobs:
 
     
     steps:
-   #Kollar repot
+    #Kollar repot
       - name: Checkout repo
         uses: actions/checkout@v4
 
@@ -28,13 +27,11 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026}}
+          password: ${{ secrets.TOKEN2026 }}
     
-    #Bygger postgres-db image med container
-      - name: Build and push postgres image to Container Registry
+    #Bygger redis image med container
+      - name: Build and push redis image to Container Registry
         run: |
-            docker build -f postgres/Containerfile \
-            -t ghcr.io/almafrank/postgres-guestbook:latest postgres
-            docker push ghcr.io/almafrank/postgres-guestbook:latest
-
+          docker build -f redis/Containerfile -t ghcr.io/almafrank/redis-guestbook:latest redis
+          docker push ghcr.io/almafrank/redis-guestbook:latest
   

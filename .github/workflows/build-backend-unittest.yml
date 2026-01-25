@@ -1,8 +1,8 @@
-name: Build unittest 
-#trigger feature branch
+name: Build unittest backend
+
 on:
     workflow_call:
-        
+
 
 #bygga postgres image
 jobs:
