@@ -1,0 +1,59 @@
+name: Pipeline Workflow
+#trigger feature branch
+on:
+  push:
+    branches:
+      - feature/*
+
+  pull_request:
+    branches:
+      - main
+#--------------------------------------------------------------------------
+#bygga postgres image
+jobs:
+   unittest:
+    uses: ./.github/workflows/build-backend-unittest.yml
+
+   container-postgres:
+    needs: unittest
+    permissions:
+      contents: read
+      packages: write
+
+    uses: ./.github/workflows/build-and-push-container-image-postgres.yml
+    secrets:
+      TOKEN2026: ${{ secrets.TOKEN2026 }}
+
+#---------------------------------------------------------------------------------    
+   container-redis:
+    needs: container-postgres
+    permissions:
+          contents: read
+          packages: write
+
+    uses: ./.github/workflows/build-and-push-container-image-redis.yml
+    secrets:
+        TOKEN2026: ${{ secrets.TOKEN2026 }}
+
+
+#--------------------------------------------------------------------------------- 
+   container-backend:
+    needs: container-redis
+    permissions:
+          contents: read
+          packages: write
+
+    uses: ./.github/workflows/build-and-push-container-image-backend.yml
+    secrets:
+        TOKEN2026: ${{ secrets.TOKEN2026 }}
+#----------------------------------------------------------------------------------  
+   container-frontend:
+    needs: container-backend
+    permissions:
+          contents: read
+          packages: write
+
+    uses: ./.github/workflows/build-and-push-container-image-frontend.yml
+    secrets:
+        TOKEN2026: ${{ secrets.TOKEN2026 }}
+
