@@ -20,7 +20,7 @@ jobs:
       contents: read
       packages: write
 
-    uses: ./.github/workflows/build-container-image-postgres.yml
+    uses: ./.github/workflows/build-and-push-container-image-postgres.yml
     secrets:
       TOKEN2026: ${{ secrets.TOKEN2026 }}
 
@@ -31,7 +31,7 @@ jobs:
           contents: read
           packages: write
 
-    uses: ./.github/workflows/build-container-image-redis.yml
+    uses: ./.github/workflows/build-and-push-container-image-redis.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
 
@@ -43,7 +43,7 @@ jobs:
           contents: read
           packages: write
 
-    uses: ./.github/workflows/build-container-image-backend.yml
+    uses: ./.github/workflows/build-and-push-container-image-backend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
 #----------------------------------------------------------------------------------  
@@ -53,7 +53,7 @@ jobs:
           contents: read
           packages: write
 
-    uses: ./.github/workflows/build-container-image-frontend.yml
+    uses: ./.github/workflows/build-and-push-container-image-frontend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
 
