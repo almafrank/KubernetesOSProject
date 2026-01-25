@@ -2,6 +2,9 @@ name: Build unittest and Build and Push Containers to GHCR
 #trigger feature branch
 on:
   workflow_call:
+     secrets:
+      TOKEN2026:
+        required: true
 #bygga postgres image
 jobs:
 
