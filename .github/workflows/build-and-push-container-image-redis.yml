@@ -7,7 +7,7 @@ on:
         required: true
 
 jobs:
-  build-redis-container-image:
+  build-and-push-redis-container-image:
   
     runs-on: ubuntu-latest
     permissions:

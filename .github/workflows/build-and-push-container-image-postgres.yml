@@ -8,7 +8,7 @@ on:
 #bygga postgres image
 jobs:
 
-  build-postgres-container-image:
+  build-and-push-postgres-container-image:
     runs-on: ubuntu-latest
 
     permissions:

@@ -7,7 +7,7 @@ on:
         required: true
 #bygga postgres image
 jobs:
-  build-frontend-container-image:
+  build-and-push-frontend-container-image:
    
     
     runs-on: ubuntu-latest
