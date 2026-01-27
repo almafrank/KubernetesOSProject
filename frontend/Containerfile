@@ -1,8 +1,8 @@
 # Använd Red Hat UBI nginx image- Bas image används med installerad Openshift(Kubernetes)- FUNGERAR INTE LOKALT
-#FROM registry.access.redhat.com/ubi10/nginx-126:10.0
+FROM registry.access.redhat.com/ubi10/nginx-126:10.0
 
 # Testa lokalt med Podman + Windows, Ingen Openshift: Bas image nginx:alpine
-FROM nginx:alpine
+#FROM nginx:alpine
 
 # Kopiera index.html och lägger i följande path- Används lokalt och med Openshift!
 COPY index.html /opt/app-root/src/index.html
@@ -10,8 +10,8 @@ COPY index.html /opt/app-root/src/index.html
 # Kopiera nginx.conf fil och lägger i följande path- används med installerad Openshift(Kubernetes)- FUNGERAR INTE LOKALT
 # Skapat lokal-nginx-conf som använder inernal proxy pass som konfigurear till backend:http://host.containers.internal:8080;->lokal konf till backend
 
-#COPY local-nginx.conf /etc/nginx/nginx.conf->med Openshift
-COPY local-nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+#COPY local-nginx.conf /etc/nginx/conf.d/default.conf
 
 # Internt port 8080->web port 8081       OBS: web port ska vara 8080 när det är openshift senare
 EXPOSE 8080
