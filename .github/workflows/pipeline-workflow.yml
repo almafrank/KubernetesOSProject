@@ -8,14 +8,14 @@ on:
   pull_request:
     branches:
       - main
-#--------------------------------------------------------------------------
-#bygga postgres image
+#1.--------------------------------------------------------------------------
+
 jobs:
    unittest:
     uses: ./.github/workflows/build-backend-unittest.yml
 
    
-#--------------------------------------------------------------------------------- 
+#2.--------------------------------------------------------------------------------- 
    container-backend:
     needs: unittest
     permissions:
@@ -25,7 +25,7 @@ jobs:
     uses: ./.github/workflows/build-and-push-container-image-backend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
-#----------------------------------------------------------------------------------  
+#3.----------------------------------------------------------------------------------  
    container-frontend:
     needs: container-backend
     permissions:
@@ -35,4 +35,16 @@ jobs:
     uses: ./.github/workflows/build-and-push-container-image-frontend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
+
+#4.-----------------------------------------------------------------------
+ 
+   update-kubernetes-sandbox-repo:
+    needs: container-frontend
+    permissions:
+          contents: read
+          packages: write
+
+    uses: ./.github/workflows/update-kubernetes-sandbox-container-images.yml
+    secrets:
+        KUBERNETESSANDBOXTOKEN: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
 

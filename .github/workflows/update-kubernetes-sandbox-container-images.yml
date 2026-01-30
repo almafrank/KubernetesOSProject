@@ -1,0 +1,47 @@
+name: Update Kubernetes Sandbox Repo Container Images
+
+on:
+    workflow_call:
+      secrets:
+        KUBERNETESSANDBOXTOKEN:
+          required: true
+
+
+
+jobs:
+
+  update-sandbox-container-images:
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      
+      contents: write
+
+    steps:
+
+        # Checkout Kubernetes Sandbox Repo
+        - name: Checkout Kubernetes Sandbox repo(infra)
+          uses: actions/checkout@v4
+          with:
+            repository: almafrank/KubernetesSandbox
+            token: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
+            path: sandbox/
+
+        #Update container images from frontend and backend in KS repo
+        - name: Update container images in Kubernetes Sandbox repo
+          run: |
+            cd sandbox
+            # Backend → SHA
+            sed -i "s|image: ghcr.io/almafrank/backend-guestbook:.*|image: ghcr.io/almafrank/backend-guestbook@sha256:9b8996d96e01ea8b69df978460f1eba9d2fd6c784a16f12c273d3912892ed7cb|" backend/backend.yaml
+
+            # Frontend → latest
+            sed -i "s|image: ghcr.io/almafrank/frontend-guestbook:.*|image: ghcr.io/almafrank/frontend-guestbook:latest|" frontend/frontend.yaml
+        - name: Commit and push changes
+          run: |
+            cd sandbox
+            git config user.name "almafrank"
+            git config user.email "almafrank107@yahoo.com"
+            git add .
+            git commit -m "Update frontend to latest and backend to SHA"
+            git push
