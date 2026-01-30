@@ -24,7 +24,7 @@ jobs:
           with:
             repository: almafrank/KubernetesSandbox
             token: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
-            path: sandbox
+            path: .
 
         #Update container images from frontend and backend in KS repo
         - name: Update container images in Kubernetes Sandbox repo
