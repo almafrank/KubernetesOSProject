@@ -42,7 +42,7 @@ jobs:
     needs: container-frontend
     permissions:
           contents: read
-          packages: write
+         
 
     uses: ./.github/workflows/update-kubernetes-sandbox-container-images.yml
     secrets:
