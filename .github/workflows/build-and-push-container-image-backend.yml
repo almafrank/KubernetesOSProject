@@ -45,7 +45,7 @@ jobs:
         run: |
           docker build -f backend/Containerfile \
             -t ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }} \
-           
+            ./backend
 
           docker push ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }}
           
