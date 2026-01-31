@@ -39,12 +39,18 @@ jobs:
 #4.-----------------------------------------------------------------------
  
    update-kubernetes-sandbox-repo:
-    needs: container-frontend
+    needs: 
+      - container-frontend
+      - container-backend
     permissions:
           contents: read
+          packages: write 
          
 
     uses: ./.github/workflows/update-kubernetes-sandbox-container-images.yml
+    with:
+      FRONTEND_IMAGE_TAG: ${{ needs.container-frontend.outputs['tag'] }}
+      BACKEND_IMAGE_TAG: ${{ needs.container-backend.outputs['tag'] }}
     secrets:
         KUBERNETESSANDBOXTOKEN: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
 

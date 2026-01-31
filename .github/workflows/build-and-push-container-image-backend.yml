@@ -14,6 +14,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    
+    outputs:
+      tag: ${{ steps.image-tag.outputs.tag }}
 
 
     
@@ -42,8 +45,7 @@ jobs:
         run: |
           docker build -f backend/Containerfile \
             -t ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }} \
-            -t ghcr.io/almafrank/backend-guestbook:latest \
-            backend
+           
 
           docker push ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }}
-          docker push ghcr.io/almafrank/backend-guestbook:latest
+          

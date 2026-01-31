@@ -2,6 +2,15 @@ name: Update Kubernetes Sandbox Repo Container Images
 
 on:
     workflow_call:
+      inputs:
+        FRONTEND_IMAGE_TAG:
+          required: true
+          type: string
+
+        BACKEND_IMAGE_TAG:
+          required: true
+          type: string
+
       secrets:
         KUBERNETESSANDBOXTOKEN:
           required: true
@@ -31,11 +40,12 @@ jobs:
           run: |
             
             ls -R
-            # Backend → SHA
-            sed -i "s|image: ghcr.io/almafrank/backend-guestbook:.*|image: ghcr.io/almafrank/backend-guestbook@sha256:9b8996d96e01ea8b69df978460f1eba9d2fd6c784a16f12c273d3912892ed7cb|" sandbox/backend/backend.yaml
+            echo "Frontend tag: ${{ inputs.FRONTEND_IMAGE_TAG }}"
+            echo "Backend tag: ${{ inputs.BACKEND_IMAGE_TAG }}"
 
-            # Frontend → latest
-            sed -i "s|image: ghcr.io/almafrank/frontend-guestbook:.*|image: ghcr.io/almafrank/frontend-guestbook:latest|" sandbox/frontend/frontend.yaml
+            
+            sed -i "s|image: ghcr.io/almafrank/backend-guestbook:.*|image: ghcr.io/almafrank/backend-guestbook:${{ inputs.BACKEND_IMAGE_TAG }}|" sandbox/backend/backend.yaml
+            sed -i "s|image: ghcr.io/almafrank/frontend-guestbook:.*|image: ghcr.io/almafrank/frontend-guestbook:${{ inputs.FRONTEND_IMAGE_TAG }}|" sandbox/frontend/frontend.yaml
         
         - name: See changes
           run: |
@@ -53,6 +63,6 @@ jobs:
             if git diff-index --quiet HEAD; then
               echo "No changes to commit"
             else
-              git commit -m "Update frontend container image to latest and backend container image to SHA version"
-              git push
+              git commit -m "Update frontend container image to ${{ inputs.FRONTEND_IMAGE_TAG }} and backend container image to ${{ inputs.BACKEND_IMAGE_TAG }}"
+              git push origin main
             fi
