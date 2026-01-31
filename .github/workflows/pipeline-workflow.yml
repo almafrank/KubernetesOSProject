@@ -25,6 +25,7 @@ jobs:
     uses: ./.github/workflows/build-and-push-container-image-backend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
+        KUBERNETESSANDBOXTOKEN: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
 #3.----------------------------------------------------------------------------------  
    container-frontend:
     needs: container-backend
@@ -35,6 +36,7 @@ jobs:
     uses: ./.github/workflows/build-and-push-container-image-frontend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
+        KUBERNETESSANDBOXTOKEN: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
 
 #4.-----------------------------------------------------------------------
  

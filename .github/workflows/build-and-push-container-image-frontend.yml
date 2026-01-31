@@ -57,27 +57,31 @@ jobs:
       - name: Show generated tag
         run: echo "TAG=${{ steps.image-tag.outputs.tag }}"
       
-       # Checkout Kubernetes Sandbox repo
+       
       - name: Checkout Kubernetes Sandbox repo
         uses: actions/checkout@v4
         with:
           repository: almafrank/KubernetesSandbox
           token: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
-          path: .      
+          path: KubernetesSandbox      
       
-      # Update frontend image in Kubernetes manifests
+      
       - name: Update frontend image in Kubernetes Sandbox
         run: |
-          sed -i "s|image: ghcr.io/almafrank/frontend-guestbook:.*|image: ghcr.io/almafrank/frontend-guestbook:${{ steps.image-tag.outputs.tag }}|" sandbox/frontend/frontend.yaml
+          sed -i "s|image: ghcr.io/almafrank/frontend-guestbook:.*|image: ghcr.io/almafrank/frontend-guestbook:${{ steps.image-tag.outputs.tag }}|" KubernetesSandbox/sandbox/frontend/frontend.yaml
       
       - name: Commit and push changes
         run: |
           git config user.name "almafrank"
           git config user.email "almafrank107@yahoo.com"
-          git add sandbox/frontend/frontend.yaml
-          git commit -m "Update frontend image to ${{ steps.image-tag.outputs.tag }}"
-          git push origin main
-      
+          git add KubernetesSandbox/sandbox/frontend/frontend.yaml
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update frontend image to: ${{ steps.image-tag.outputs.tag }}"
+            git push origin main
+          fi
+          
       
          
   
