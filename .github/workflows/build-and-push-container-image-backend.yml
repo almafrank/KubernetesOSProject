@@ -21,6 +21,13 @@ jobs:
    #Kollar repot
       - name: Checkout repo
         uses: actions/checkout@v4
+      - name: Generate image tag
+        id: image-tag
+        run: |
+          SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)
+          IMAGE_TAG="1.0.${GITHUB_RUN_NUMBER}-${SHORT_SHA}"
+          echo "tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "Generated tag: ${IMAGE_TAG}"
 
     # Logga in på Github för att pusha och pulla images i Container Registry
       - name: Login to GitHub Container Registry
@@ -33,6 +40,10 @@ jobs:
     #Bygger backend image med container
       - name: Build and push backend image to Container Registry
         run: |
-          docker build -f backend/Containerfile -t ghcr.io/almafrank/backend-guestbook:latest backend
+          docker build -f backend/Containerfile \
+            -t ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }} \
+            -t ghcr.io/almafrank/backend-guestbook:latest \
+            backend
+
+          docker push ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }}
           docker push ghcr.io/almafrank/backend-guestbook:latest
-    
