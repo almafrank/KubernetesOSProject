@@ -5,7 +5,10 @@ on:
      secrets:
       TOKEN2026:
         required: true
-#bygga postgres image
+      KUBERNETESSANDBOXTOKEN:
+        required: true
+
+
 jobs:
   build-and-push-frontend-container-image:
    
@@ -50,5 +53,31 @@ jobs:
             ./frontend
 
           docker push ghcr.io/almafrank/frontend-guestbook:${{ steps.image-tag.outputs.tag }}
+      
+      - name: Show generated tag
+        run: echo "TAG=${{ steps.image-tag.outputs.tag }}"
+      
+       # Checkout Kubernetes Sandbox repo
+      - name: Checkout Kubernetes Sandbox repo
+        uses: actions/checkout@v4
+        with:
+          repository: almafrank/KubernetesSandbox
+          token: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
+          path: .      
+      
+      # Update frontend image in Kubernetes manifests
+      - name: Update frontend image in Kubernetes Sandbox
+        run: |
+          sed -i "s|image: ghcr.io/almafrank/frontend-guestbook:.*|image: ghcr.io/almafrank/frontend-guestbook:${{ steps.image-tag.outputs.tag }}|" sandbox/frontend/frontend.yaml
+      
+      - name: Commit and push changes
+        run: |
+          git config user.name "almafrank"
+          git config user.email "almafrank107@yahoo.com"
+          git add sandbox/frontend/frontend.yaml
+          git commit -m "Update frontend image to ${{ steps.image-tag.outputs.tag }}"
+          git push origin main
+      
+      
          
   

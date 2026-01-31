@@ -5,11 +5,11 @@ on:
      secrets:
       TOKEN2026:
         required: true
+      KUBERNETESSANDBOXTOKEN:
+        required: true
 #bygga postgres image
 jobs:
   build-and-push-backend-container-image:
-   
-    
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -48,4 +48,27 @@ jobs:
             ./backend
 
           docker push ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }}
-          
+      
+      - name: Show generated tag
+        run: echo "TAG=${{ steps.image-tag.outputs.tag }}"
+      
+      # Checkout Kubernetes Sandbox repo
+      - name: Checkout Kubernetes Sandbox repo
+        uses: actions/checkout@v4
+        with:
+          repository: almafrank/KubernetesSandbox
+          token: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
+          path: .
+     
+      # Update backend image in Kubernetes manifests
+      - name: Update backend image in Kubernetes Sandbox
+        run: |
+          sed -i "s|image: ghcr.io/almafrank/backend-guestbook:.*|image: ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }}|" sandbox/backend/backend.yaml
+      
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add sandbox/backend/backend.yaml
+          git commit -m "Update backend image to ${{ steps.image-tag.outputs.tag }}"
+          git push origin main
