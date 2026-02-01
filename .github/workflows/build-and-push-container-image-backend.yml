@@ -1,4 +1,4 @@
-name: Build container image Backend and Push Containers to GHCR
+name: Build container image Backend 
 #trigger feature branch
 on:
   workflow_call:
@@ -7,7 +7,12 @@ on:
         required: true
       KUBERNETESSANDBOXTOKEN:
         required: true
-#bygga postgres image
+
+env:
+  IMAGE_REGISTRY: ghcr.io
+  IMAGE_NAME: almafrank/backend-guestbook
+  CONFIG_REPO: almafrank/KubernetesSandbox
+  
 jobs:
   build-and-push-backend-container-image:
     runs-on: ubuntu-latest
@@ -15,15 +20,23 @@ jobs:
       contents: read
       packages: write
     
-    outputs:
-      tag: ${{ steps.image-tag.outputs.tag }}
-
+    
 
     
     steps:
-   #Kollar repot
+      #Checkout repo
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      # Login på Github 
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{env.IMAGE_REGISTRY}}
+          username: ${{ github.actor }}
+          password: ${{ secrets.TOKEN2026}}
+
+       # Generate image tag
       - name: Generate image tag
         id: image-tag
         run: |
@@ -31,49 +44,48 @@ jobs:
           IMAGE_TAG="1.0.${GITHUB_RUN_NUMBER}-${SHORT_SHA}"
           echo "tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
           echo "Generated tag: ${IMAGE_TAG}"
-
-    # Logga in på Github för att pusha och pulla images i Container Registry
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      
+      - name: Build and push image
+        uses: docker/build-push-action@v5
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.TOKEN2026}}
-    
-    #Bygger backend image med container
-      - name: Build and push backend image to Container Registry
-        run: |
-          docker build -f backend/Containerfile \
-            -t ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }} \
-            ./backend
+          context: ./backend
+          file: ./backend/Containerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.image-tag.outputs.tag }}
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          build-args: |
+            APP_VERSION=${{ steps.image-tag.outputs.tag }}
+      
 
-          docker push ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }}
+    
+     
       
       - name: Show generated tag
         run: echo "TAG=${{ steps.image-tag.outputs.tag }}"
       
-      
       - name: Checkout Kubernetes Sandbox repo
         uses: actions/checkout@v4
         with:
-          repository: almafrank/KubernetesSandbox
+          repository: ${{ env.CONFIG_REPO }}
           token: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
-          path: KubernetesSandbox
+          path: sandbox
      
-     
-      - name: Update backend image in Kubernetes Sandbox
-        run: |
-          sed -i "s|image: ghcr.io/almafrank/backend-guestbook:.*|image: ghcr.io/almafrank/backend-guestbook:${{ steps.image-tag.outputs.tag }}|" KubernetesSandbox/sandbox/backend.yaml
       
-      - name: Commit and push changes
+      - name: Update Kubernetes manifests
         run: |
+          
+          sed -i "s|image: .*backend-guestbook.*|image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.image-tag.outputs.tag }}|" sandbox/sandbox/backend.yaml
+
           git config user.name "almafrank"
           git config user.email "almafrank107@yahoo.com"
-          git add KubernetesSandbox/sandbox/backend.yaml
-          if git diff-index --quiet HEAD; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update backend image to: ${{ steps.image-tag.outputs.tag }}"
-            git push origin main
-          fi
-          
+          git add sandbox/sandbox/backend.yaml
+          git commit -m "Update backend image to ${{ steps.image-tag.outputs.tag }}"
+          git push origin main
+      
+      
+      
+     
+     
+      
+      
