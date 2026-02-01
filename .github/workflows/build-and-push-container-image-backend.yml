@@ -75,11 +75,11 @@ jobs:
       - name: Update Kubernetes manifests
         run: |
           
-          sed -i "s|image: .*backend-guestbook.*|image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.image-tag.outputs.tag }}|" sandbox/sandbox/backend.yaml
+          sed -i "s|image: .*backend-guestbook.*|image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.image-tag.outputs.tag }}|" sandbox/backend.yaml
 
           git config user.name "almafrank"
           git config user.email "almafrank107@yahoo.com"
-          git add sandbox/sandbox/backend.yaml
+          git add sandbox/backend.yaml
           git commit -m "Update backend image to ${{ steps.image-tag.outputs.tag }}"
           git push origin main
       
