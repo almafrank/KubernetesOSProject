@@ -25,6 +25,7 @@ jobs:
     uses: ./.github/workflows/build-and-push-container-image-backend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
+        KUBERNETESSANDBOXTOKEN: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
 #3.----------------------------------------------------------------------------------  
    container-frontend:
     needs: container-backend
@@ -35,16 +36,5 @@ jobs:
     uses: ./.github/workflows/build-and-push-container-image-frontend.yml
     secrets:
         TOKEN2026: ${{ secrets.TOKEN2026 }}
-
-#4.-----------------------------------------------------------------------
- 
-   update-kubernetes-sandbox-repo:
-    needs: container-frontend
-    permissions:
-          contents: read
-         
-
-    uses: ./.github/workflows/update-kubernetes-sandbox-container-images.yml
-    secrets:
         KUBERNETESSANDBOXTOKEN: ${{ secrets.KUBERNETESSANDBOXTOKEN }}
 
