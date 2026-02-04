@@ -4,7 +4,7 @@ on:
     workflow_call:
 
 
-#bygga postgres image
+
 jobs:
 
   build-unittest-backend:
